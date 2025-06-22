@@ -1,0 +1,13 @@
+digraph {
+	rankdir=LR size=10
+	EB [label="Environmental beliefs" fillcolor="#b3e2cd" shape=ellipse style=filled]
+	EK [label="Environmental knowledge" fillcolor="#cbd5e8" shape=ellipse style=filled]
+	EC [label="Environmental concern" fillcolor="#fddaec" shape=ellipse style=filled]
+	GBI [label="Green brand image" fillcolor="#fed9a6" shape=ellipse style=filled]
+	BL [label="Brand loyalty" fillcolor="#fbb4ae" shape=ellipse style=filled]
+	EB -> EC [label="H1: .72***"]
+	EK -> EC [label="H2: .06**"]
+	EC -> GBI [label="H3: –.26***"]
+	GBI -> BL [label="H4: .52***"]
+	fontsize=20 label="Figure: Structural Equation Model"
+}

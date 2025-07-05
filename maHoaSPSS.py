@@ -1,7 +1,8 @@
 import pandas as pd
+from datetime import datetime
 
 # Đọc dữ liệu
-file_path = 'DataHien1605.xlsx'
+file_path = 'data.xlsx'
 df = pd.read_excel(file_path, sheet_name='Form Responses 1')
 
 # Loại bỏ các hàng thiếu dữ liệu ở bất kỳ cột nào
@@ -45,4 +46,7 @@ for col in df.columns:
         df[col] = df[col].map(likert_map)
 
 # Xuất ra file xlsx mới
-df.to_excel('DataHien1605_encoded_cleaned.xlsx', index=False)
+# df.to_excel('Data_encoded.xlsx', index=False)
+today_str = datetime.today().strftime('%d%m')
+output_filename = f'data_{today_str}_encoded.xlsx'
+df.to_excel(output_filename, index=False)

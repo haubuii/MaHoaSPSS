@@ -83,11 +83,10 @@ for col in df.columns:
     if df[col].isin(likert_map.keys()).any():
         df[col] = df[col].map(likert_map)
 
-# Xuất ra file xlsx mới kèm cả giờ phút và ngày tháng theo định dạng yêu cầu
+# Xuất ra file xlsx mới kèm cả giờ phút và ngày tháng
 now_str = datetime.today().strftime("%Hh%M_%d-%m-%Y")
-output_filename = f"data_{now_str}.xlsx"
+output_filename = f"dataHien_{now_str}_encoded.xlsx"
 df.to_excel(output_filename, index=False)
-# In ra thông báo hoàn thành
 print(f"Dữ liệu đã được mã hóa và lưu vào file: {output_filename}")
 
 # Pattern Matrix EK1, EK3,Patten EB1, EB2,

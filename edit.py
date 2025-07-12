@@ -5,7 +5,6 @@ import random
 import re
 import os
 
-
 # === Nhập tên file Excel từ bàn phím và kiểm tra tồn tại ===
 while True:
     input_file = input("Nhập tên file Excel (.xlsx) cần sửa số liệu (mặc định = data_encoded.xlsx): ").strip()
@@ -19,6 +18,7 @@ while True:
 
 # === Cấu hình ===
 max_edits_per_row = 1  # Mỗi dòng chỉ được sửa tối đa 1 lần
+
 # === Nhập từ bàn phím (có mặc định) ===
 try:
     input_ratio = input("Nhập tỷ lệ dòng cần sửa (mặc định = 0.1 (10%)): ").strip()
@@ -47,7 +47,6 @@ except:
     corr_range = (0.65, 0.9)
     print("⚠️ Không hợp lệ. Dùng mặc định corr_range = (0.65, 0.9)")
 
-
 # === Đọc dữ liệu và xác định các cột cần kiểm tra ===
 df = pd.read_excel(file_path)
 
@@ -60,12 +59,18 @@ groups = {}
 for col in columns_to_check:
     prefix = re.match(r'^([A-Z]+)', col).group(1)
     groups.setdefault(prefix, []).append(col)
-    
+
 # In ra thông tin nhóm cột
 print("\n[INFO] Các nhóm cột được xác định:")
 for group_name, group_cols in groups.items():
     print(f"  - Nhóm {group_name}: {', '.join(group_cols)}")
-    
+
+# === Tạo biến trung bình đại diện nhóm ===
+print("\n[INFO] Tạo biến trung bình cho từng nhóm...")
+for group_name, group_cols in groups.items():
+    new_col_name = f"{group_name}_mean"
+    df[new_col_name] = df[group_cols].mean(axis=1)
+    print(f"  ➕ Đã thêm cột: {new_col_name}")
 
 # === Hàm xử lý tương quan nhóm ===
 def fix_column_corr(df_group, edit_ratio, corr_range):
@@ -116,6 +121,11 @@ for group_name, group_cols in groups.items():
         edit_flag = True
     else:
         print(f"[INFO] ⏭ Không cần sửa nhóm {group_name}")
+
+# === Tạo lại các biến trung bình vào df_fixed sau chỉnh sửa ===
+for group_name, group_cols in groups.items():
+    new_col_name = f"{group_name}_mean"
+    df_fixed[new_col_name] = df_fixed[group_cols].mean(axis=1)
 
 # === Xuất file nếu có chỉnh sửa ===
 now_str = datetime.today().strftime("%Hh%M_%d-%m-%Y")
